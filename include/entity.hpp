@@ -57,13 +57,13 @@ public:
     }
     Vector2f getSize() {
         return size;
-    };
+    }
     SDL_Texture* getTex() {
         return texture;
-    };
+    }
     SDL_Rect getCurrentFrame() {
         return currentFrame;
-    };
+    }
     void changePos(Vector2f p_velocity);
 
     void changeTexture(SDL_Texture* p_tex);

@@ -5,6 +5,7 @@
 
 #include "RenderWindow.hpp"
 #include "utilities.hpp"
+#include "events.hpp"
 
 #include "aniList.hpp"
 
@@ -21,48 +22,33 @@ int main(int argc, char *argv[]) {
     //Window & entities initialization 
     RenderWindow window("Hello!", 1920, 1080);
 
+    SDL_Event gameEvent;
     Background Bg(window.loadTexture("res/gfx/bg.png"));
     std::vector<Player> players = {Player(Vector2f(100, 100), window.loadTexture("res/gfx/p_player_idle.png"), Vector2f(100, 100))};
 //--------------------------------------------------------------------------------------------------------
     //Creating time loop
-    SDL_Event event;
-    // const float timeStep = 0.02f;
-    // float accumulator = 0.0f;
-    //float currentTime = utils::hireTime();
     const int frameDelay = 1000 / 15;
+
+    //Initializing game stats
+    Vector2f velocity;
+    Vector2f MousePos;
 
     //Running the game
     bool gameRunning = true;
-    int aniID = 0;
     while (gameRunning) {
         int startTick = SDL_GetTicks();
-        // float newTime = utils::hireTime();
-        // float frameTime = newTime - currentTime;
-
-        // currentTime = newTime;
-        // accumulator += frameTime;
 
         //Dealing with events
-        //while (accumulator >= timeStep) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_KEYDOWN) {
-                switch (event.key.keysym.sym) {
-                    case SDLK_s:
-                        std::cout << animationList[aniID];
-                        players[0].changeTexture(window.loadTexture(animationList[aniID]));
-                        ++aniID;
-                        if (aniID > 3) aniID = 0;
-                        break;
-                    case SDLK_ESCAPE:
-                        gameRunning = false;
-                        break;
-                    default:
-                        break;
-                }
+        while (SDL_PollEvent(&gameEvent)) {
+            if (gameEvent.type == SDL_MOUSEBUTTONDOWN) {
+                MousePos.x = gameEvent.button.x;
+                MousePos.y = gameEvent.button.y;
+                velocity = Velocity(players[0].getPos(), MousePos, 20);
             }
-            if (event.type == SDL_QUIT) gameRunning = false;
+            if (gameEvent.type == SDL_QUIT) gameRunning = false;
             SDL_ResetKeyboard();
         }
+        if (!VectorsEqual(players[0].getPos(), MousePos)) MovePlayerTo(players[0], MousePos, velocity);
         
         //Run graphics
         window.clear();
@@ -72,6 +58,10 @@ int main(int argc, char *argv[]) {
         players[0].runAnimation(5);
 
         std::cout << utils::hireTime() << std::endl;
+        std::cout << "mouse pos:"; MousePos.print();
+        std::cout << "obj velocity:"; velocity.print();
+        std::cout << std::endl;
+
 
         window.display();
 
