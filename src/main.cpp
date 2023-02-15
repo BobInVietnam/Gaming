@@ -58,10 +58,9 @@ int main(int argc, char *argv[]) {
         players[0].runAnimation(5);
 
         std::cout << utils::hireTime() << std::endl;
-        std::cout << "mouse pos:"; MousePos.print();
-        std::cout << "obj velocity:"; velocity.print();
-        std::cout << std::endl;
-
+        // std::cout << "mouse pos:"; MousePos.print();
+        // std::cout << "obj velocity:"; velocity.print();
+        // std::cout << std::endl;
 
         window.display();
 

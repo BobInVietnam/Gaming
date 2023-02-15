@@ -4,4 +4,4 @@
 #include "math.hpp"
 #include "entity.hpp"
 
-void MovePlayerTo(Player p_player, Vector2f p_des, Vector2f p_velocity);
+void MovePlayerTo(Player& p_player, Vector2f p_des, Vector2f p_velocity);
